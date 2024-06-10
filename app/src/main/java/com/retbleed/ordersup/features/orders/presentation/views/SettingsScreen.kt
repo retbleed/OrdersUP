@@ -58,7 +58,7 @@ fun SettingsScreen (navController: NavController) {
                 }
             }
         LaunchedEffect(true) {
-            requestPermissionLauncher.launch(Manifest.permission.BLUETOOTH)
+            requestPermissionLauncher.launch(Manifest.permission.BLUETOOTH_CONNECT)
         }
 
         val requestDiscoverableLauncher = rememberLauncherForActivityResult(
