@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 
 @Dao
-interface DatabaseOrderDao {
+interface DatabaseProductDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOrder(order: DatabaseOrder)
+    suspend fun insertOrder(order: DatabaseProduct)
 }
