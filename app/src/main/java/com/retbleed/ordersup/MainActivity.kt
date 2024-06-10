@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.retbleed.ordersup.commons.routing.AppNavGraph
 import com.retbleed.ordersup.ui.theme.OrdersUPTheme
 
@@ -24,6 +25,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             OrdersUPTheme {
                 Surface() {
+                    navController = rememberNavController()
                     AppNavGraph(navController)
                 }
             }

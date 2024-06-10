@@ -66,6 +66,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // required to avoid crash on Android 12 API 31
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+
     // Gson
     implementation ("com.google.code.gson:gson:2.10.1")
 
