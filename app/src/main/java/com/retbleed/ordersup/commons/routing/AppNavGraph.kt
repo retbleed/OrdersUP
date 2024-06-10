@@ -15,7 +15,7 @@ fun AppNavGraph(navHostController: NavHostController){
     NavHost(navController = navHostController, startDestination = ROUTE_VERIFICATION) {
 
         // Verification
-        composable(ROUTE_VERIFICATION){VerificationScreen(navController = navHostController, route = Route.RouteVerification)}
+        composable(ROUTE_VERIFICATION){VerificationScreen(navController = navHostController)}
 
         // Login
         composable(ROUTE_LOGIN){ LoginScreen(navController = navHostController, route = Route.RouteLogin) }
