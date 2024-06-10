@@ -4,9 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import com.retbleed.ordersup.features.orders.data.DatabaseOrder
-import com.retbleed.ordersup.features.orders.data.DatabaseOrderDao
+import com.retbleed.ordersup.features.orders.data.DatabaseProduct
+import com.retbleed.ordersup.features.orders.data.DatabaseProductDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,10 +13,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-@Database(entities = [DatabaseOrder::class], version = 1, exportSchema = false)
-//@TypeConverters(Converters::class)
+@Database(entities = [DatabaseProduct::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun orderDao(): DatabaseOrderDao
+    abstract fun orderDao(): DatabaseProductDao
 }
 
 @Module
@@ -28,7 +26,7 @@ object DatabaseModule {
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
-            AppDatabase::class.java, "ARREGA_LOCALDATABASE"
+            AppDatabase::class.java, "LOCALDATABASE"
         ).fallbackToDestructiveMigration()
             .build()
     }
