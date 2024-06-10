@@ -1,6 +1,11 @@
 package com.retbleed.ordersup
 
+import android.Manifest
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothManager
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
@@ -19,7 +24,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.retbleed.ordersup.commons.adapters.BluetoothManager
+//import com.retbleed.ordersup.commons.adapters.BluetoothManager
 import com.retbleed.ordersup.commons.routing.AppNavGraph
 import com.retbleed.ordersup.ui.theme.OrdersUPTheme
 
@@ -38,13 +43,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (allPermissionsGranted()) {
-            initializeBluetoothManager()
-        } else {
-            ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
-        }
-
-        bluetoothManager?.discoverDevices();
+//        if (allPermissionsGranted()) {
+//            initializeBluetoothManager()
+//        } else {
+//            ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+//        }
+//
+//        bluetoothManager?.discoverDevices();
 
         enableEdgeToEdge()
         lateinit var navController: NavHostController
@@ -60,34 +65,41 @@ class MainActivity : ComponentActivity() {
 
     }
 
-    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
-    }
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val action: String = intent.action.toString()
+            when(action) {
+                BluetoothDevice.ACTION_FOUND -> {
+                    // Discovery has found a device. Get the BluetoothDevice
+                    // object and its info from the Intent.
+                    val device: BluetoothDevice? =
+                        intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+                    val deviceName = if (ActivityCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.BLUETOOTH_CONNECT
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return
+                    } else {
 
-    @Deprecated("Sepa la vrg")
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if (allPermissionsGranted()) {
-                initializeBluetoothManager()
-            } else {
-                Toast.makeText(this, "Permissions not granted by the user.", Toast.LENGTH_SHORT).show()
-                finish()
+                    }
+                    device?.name
+                    val deviceHardwareAddress = device?.address // MAC address
+                }
             }
         }
     }
 
-    private fun initializeBluetoothManager() {
-        bluetoothManager = BluetoothManager(this)
-        // Para descubrir dispositivos
-        bluetoothManager!!.discoverDevices()
-
-        // Para transferir datos a un dispositivo específico (asumiendo que ya tienes el dispositivo)
-        val devices = // obtener dispositivo de la lista descubierta
-            device?.let { bluetoothManager!!.transferData(it, "Hello, Bluetooth!") }
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(receiver)
     }
+
 }
