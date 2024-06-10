@@ -4,11 +4,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class DatabaseProduct(
+data class DatabaseUser(
     @PrimaryKey val uid: String,
     val name: String,
-    val image64: String,
-    val createdBy: Int,
-    val createdAt: String,
+    val password: String,
     val whereOrigin: String
 )
