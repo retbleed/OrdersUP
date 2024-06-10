@@ -12,26 +12,29 @@ import com.retbleed.ordersup.features.orders.presentation.views.*
 
 @Composable
 fun AppNavGraph(navHostController: NavHostController){
-    NavHost(navController = navHostController, startDestination = ROUTE_VERIFICATION) {
+    NavHost(navController = navHostController, startDestination = ROUTE_HOME) {
 
         // Verification
         composable(ROUTE_VERIFICATION){VerificationScreen(navController = navHostController)}
 
         // Login
-        composable(ROUTE_LOGIN){ LoginScreen(navController = navHostController, route = Route.RouteLogin) }
+        composable(ROUTE_LOGIN){ LoginScreen(navController = navHostController) }
+
+        // Settings
+        composable(ROUTE_SETTINGS){ SettingsScreen(navHostController) }
 
         // Sign Up
-        composable(ROUTE_SIGNUP){SignupScreen(navController = navHostController, route = Route.RouteSignUp)}
+        composable(ROUTE_SIGNUP){SignupScreen(navController = navHostController)}
 
         // Home
-        composable(ROUTE_HOME){ HomeScreen(navController = navHostController, route = Route.RouteHome) }
+        composable(ROUTE_HOME){ HomeScreen(navController = navHostController) }
 
         // Products
-        composable(ROUTE_PRODUCTS){ProductsHomeScreen(navController = navHostController, route = Route.RouteHome)}
+        composable(ROUTE_PRODUCTS){ProductsHomeScreen(navController = navHostController)}
         composable(Route.RouteProductDetails.route + "/{id}", arguments = listOf(navArgument("id") { type = NavType.StringType })) { backStackEntry ->
             val orderId = backStackEntry.arguments?.getString("id")
             Route.RouteProductDetails.route.let {
-                ProductsDetailsScreen(navHostController, Route.RouteProductDetails ,id = orderId ?: "")
+                ProductsDetailsScreen(navHostController, id = orderId ?: "")
             }
         }
     }
